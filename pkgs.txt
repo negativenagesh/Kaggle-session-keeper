@@ -1,0 +1,6 @@
+pyautogui
+mouseinfo
+python3-xlib
+pyscreeze
+PyTweening
+pillow
