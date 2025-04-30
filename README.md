@@ -47,7 +47,7 @@ Before running the script, enable local X11 connections:
 xhost +local:
 ```
 
-6. # Run the script
+6. Run the script
 ```zsh
 python autoscroll.py
 ```
