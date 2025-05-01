@@ -51,39 +51,36 @@ def keep_kaggle_session_active():
             if PYAUTOGUI_AVAILABLE:
                 activity_count += 1
                 elapsed_seconds = int(time.time() - start_time)
+                
                 # Remember starting position
                 start_x, start_y = pyautogui.position()
                 
-                # Perform a variety of actions to signal activity
+                # Perform scrolling actions to keep session active
                 if activity_count % 3 == 0:
-                    # Click action (every third cycle)
+                    # Occasional click to ensure focus
                     pyautogui.click()
                     print(f"Clicked at position ({start_x}, {start_y}) at {elapsed_seconds}s")
-                    
-                    # Small movement after click
-                    move_x = random.randint(-20, 20)
-                    move_y = random.randint(-20, 20)
-                    new_x = max(0, min(screen_width - 10, start_x + move_x)) 
-                    new_y = max(0, min(screen_height - 10, start_y + move_y))
-                    pyautogui.moveTo(new_x, new_y, duration=0.3)
-                else:
-                    # More significant random movement
-                    move_x = random.randint(-100, 100)
-                    move_y = random.randint(-100, 100)
-                    new_x = max(0, min(screen_width - 10, start_x + move_x))
-                    new_y = max(0, min(screen_height - 10, start_y + move_y))
-                    pyautogui.moveTo(new_x, new_y, duration=0.5)
-                    print(f"Moved mouse from ({start_x}, {start_y}) to ({new_x}, {new_y}) at {elapsed_seconds}s")
-                    
-                # Return close to original position (but not exactly)
-                return_x = start_x + random.randint(-5, 5)
-                return_y = start_y + random.randint(-5, 5)
-                pyautogui.moveTo(return_x, return_y, duration=0.3)
+                
+                # Random scroll amount - negative values scroll down, positive scroll up
+                scroll_amount = random.randint(-10, 10) * 10  # Scale for more noticeable scrolling
+                
+                # Perform the scroll
+                pyautogui.scroll(scroll_amount)
+                direction = "up" if scroll_amount > 0 else "down"
+                print(f"Scrolled {direction} by {abs(scroll_amount)} units at {elapsed_seconds}s")
+                
+                # Sometimes do a second scroll in opposite direction
+                if random.random() > 0.6:  # 40% chance
+                    time.sleep(0.5)
+                    opposite_scroll = -scroll_amount // 2
+                    pyautogui.scroll(opposite_scroll)
+                    opposite_dir = "up" if opposite_scroll > 0 else "down"
+                    print(f"Additional scroll {opposite_dir} by {abs(opposite_scroll)} units")
             else:
                 print("WARNING: Simulated movement only (no actual mouse control)")
                 
             # Fixed wait time of 5 seconds
-            print(f"Activity count: {activity_count} - Next movement in 5 seconds")
+            print(f"Activity count: {activity_count} - Next action in 5 seconds")
             time.sleep(5)
 
     except KeyboardInterrupt:
